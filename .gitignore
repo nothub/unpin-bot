@@ -1,0 +1,21 @@
+# ignore all files
+*
+# but include directories
+!*/
+
+# git
+!/**/.gitkeep
+!/.gitignore
+
+# github
+!/.github/**
+
+# python
+!/*.py
+!/requirements.txt
+
+# misc
+!/.editorconfig
+!/LICENSE
+!/Makefile
+!/.env

@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import os
+
+from disnake import Message
+from disnake.ext import tasks, commands
+from dotenv import load_dotenv
+
+
+class Shit(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.ass.start()
+
+    @tasks.loop(seconds=10)
+    async def ass(self):
+        for guild in self.bot.guilds:
+            for channel in guild.text_channels:
+                pins = await channel.pins()
+                if len(pins) > int(os.environ['MAX_PINS']):
+                    pins.sort(key=lambda m: m.created_at)  # sort by creation date (oldest first)
+                    oldest: Message = pins[0]
+                    print("unpinning message_id=" + str(oldest.id) +
+                          " author_id=" + str(oldest.author.id) +
+                          " author_name=" + oldest.author.name +
+                          " message_content=\"" + oldest.content + "\"")
+                    await oldest.unpin()
+
+    @ass.before_loop
+    async def before_printer(self):
+        print('waiting...')
+        await self.bot.wait_until_ready()
+
+
+# pyz entrypoint
+def main():
+    load_dotenv()
+    bot = commands.Bot()
+    bot.add_cog(Shit(bot))
+    bot.run(os.environ['BOT_TOKEN'])
+
+
+# this will not be invoked, when called in pyz context
+if __name__ == '__main__':
+    main()
