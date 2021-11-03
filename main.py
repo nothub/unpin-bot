@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+from os.path import exists
 
 from disnake import Message
 from disnake.ext import tasks, commands
@@ -27,13 +28,17 @@ class Shit(commands.Cog):
 
     @ass.before_loop
     async def before_printer(self):
-        print('waiting...')
         await self.bot.wait_until_ready()
 
 
 # pyz entrypoint
 def main():
-    load_dotenv()
+    if not exists("config.env"):
+        print("saving default config")
+        with open('config.env', 'w') as file:
+            file.write("BOT_TOKEN=CHANGEME" + "\n" + "MAX_PINS=100" + "\n")
+        exit(0)
+    load_dotenv("config.env")
     bot = commands.Bot()
     bot.add_cog(Shit(bot))
     bot.run(os.environ['BOT_TOKEN'])
