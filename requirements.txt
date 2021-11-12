@@ -1,2 +1,2 @@
 disnake~=2.2.1
-python-dotenv~=0.19.1
+python-dotenv~=0.19.2
